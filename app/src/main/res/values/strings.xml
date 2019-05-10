@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">ASCII-ART</string>
+
+    <string name="act_main_label">Upload a picture</string>
 </resources>

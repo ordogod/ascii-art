@@ -1,5 +1,10 @@
 package com.ordolabs.asciiArt.ui.main;
 
+import android.text.InputFilter;
+import android.widget.EditText;
+import android.widget.ImageButton;
+
+import com.ordolabs.asciiArt.data.MinMaxInputFilter;
 import com.ordolabs.asciiArt.ui.base.BaseActivity;
 import com.ordolabs.asciiArt.ui.base.BasePresenter;
 import com.ordolabs.myapplication.R;
@@ -10,6 +15,11 @@ import com.ordolabs.myapplication.R;
 
 class MainPresenter<V extends BaseActivity> extends BasePresenter<V> implements MainMvpContract.MainMvpPresenter<V> {
 
+    private EditText fontSizeInput;
+
+    private ImageButton fontSizeButtonLess;
+    private ImageButton fontSizeButtonMore;
+
     MainPresenter(V mvpView) {
         super(mvpView);
         setToolbar(mvpView.getString(R.string.act_main_label));
@@ -19,6 +29,11 @@ class MainPresenter<V extends BaseActivity> extends BasePresenter<V> implements 
     @Override
     public void initLayoutViews() {
 
+        fontSizeInput = mvpView.findViewById(R.id.mainFontSizeInput);
+        fontSizeInput.setFilters(new InputFilter[]{ new MinMaxInputFilter("3", "30")});
+
+        fontSizeButtonLess = mvpView.findViewById(R.id.mainFontSizeButtonLess);
+        fontSizeButtonMore = mvpView.findViewById(R.id.mainFontSizeButtonMore);
     }
 
     @Override

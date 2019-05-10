@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="transparent">#0000</color>
+
     <color name="primaryDark">#28292e</color> <!--for status bar-->
     <color name="primary">#32343a</color> <!--for toolbar-->
     <color name="windowBackground">#282a2e</color> <!--for activity background-->

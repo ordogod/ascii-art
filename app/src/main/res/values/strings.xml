@@ -2,4 +2,8 @@
     <string name="app_name">ASCII-ART</string>
 
     <string name="act_main_label">Upload a picture</string>
+    <string name="act_main_choose_picture">Choose picture</string>
+    <string name="act_main_font_size">Font size:</string>
+    <string name="act_main_text_list">Text list:</string>
+    <string name="act_main_text_list_clear">Clear</string>
 </resources>

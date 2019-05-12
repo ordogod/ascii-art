@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:gravity="top"
-    android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:orientation="vertical"
+    android:layout_height="match_parent"
     android:clipChildren="false"
-    tools:context="com.ordolabs.asciiArt.ui.main.MainActivity" >
+    android:gravity="top"
+    android:orientation="vertical"
+    tools:context="com.ordolabs.asciiArt.ui.main.MainActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:theme="@style/ActionBarStyle" />
 
     <LinearLayout
@@ -20,17 +20,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        android:orientation="vertical"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp" >
+        android:layout_marginRight="20dp"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/mainSettingsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="40dp"
-            android:paddingBottom="0">
+            android:paddingTop="40dp">
 
             <LinearLayout
                 android:id="@+id/mainSettingsFontSizeRow"
@@ -39,49 +38,72 @@
                 android:layout_marginBottom="20dp"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/mainFontSizeText"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
-                    android:fontFamily="@font/roboto_light"
-                    android:text="@string/act_main_font_size"
-                    android:textSize="20sp" />
+                    android:orientation="vertical">
 
-                <ImageButton
-                    android:id="@+id/mainFontSizeButtonLess"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    <TextView
+                        android:id="@+id/mainFontSizeHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:fontFamily="@font/roboto_light"
+                        android:text="@string/act_main_font_size_header"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/mainFontSizeLimits"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_light_italic"
+                        android:text="@string/act_main_font_size_limits"
+                        android:textColor="@color/secondaryText"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/button_border"
-                    android:src="@drawable/ic_keyboard_arrow_left_light_24dp" />
+                    android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/mainFontSizeInput"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:ems="5"
-                    android:fontFamily="@font/roboto_regular"
-                    android:gravity="center"
-                    android:hint="12"
-                    android:importantForAutofill="no"
-                    android:inputType="numberSigned" />
+                    <ImageButton
+                        android:id="@+id/mainFontSizeButtonLess"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="0.25"
+                        android:background="@drawable/button_border"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:src="@drawable/ic_keyboard_arrow_left_light_24dp" />
 
-                <ImageButton
-                    android:id="@+id/mainFontSizeButtonMore"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/button_border"
-                    android:src="@drawable/ic_keyboard_arrow_right_light_24dp" />
+                    <TextView
+                        android:id="@+id/mainFontSizeSpan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.5"
+                        android:fontFamily="@font/roboto_regular"
+                        android:gravity="center"
+                        android:text="12"
+                        android:textSize="18sp" />
+
+                    <ImageButton
+                        android:id="@+id/mainFontSizeButtonMore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="0.25"
+                        android:background="@drawable/button_border"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:src="@drawable/ic_keyboard_arrow_right_light_24dp" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -89,37 +111,64 @@
                 android:id="@+id/mainSettingsTextListRow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp">
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/mainTextListText"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
-                    android:fontFamily="@font/roboto_light"
-                    android:text="@string/act_main_font_size"
-                    android:textSize="20sp" />
+                    android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/editText3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_weight="1"
-                    android:ems="8"
-                    android:gravity="center"
-                    android:inputType="textPersonName" />
+                    <TextView
+                        android:id="@+id/mainTextListHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:fontFamily="@font/roboto_light"
+                        android:text="@string/act_main_text_list_header"
+                        android:textSize="20sp" />
 
-                <Button
-                    android:id="@+id/button5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:background="@drawable/button_border"
-                    android:fontFamily="@font/roboto_light"
-                    android:text="@string/act_main_text_list_clear" />
+                    <TextView
+                        android:id="@+id/mainTextListNote"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_light_italic"
+                        android:text="@string/act_main_text_list_note"
+                        android:textColor="@color/secondaryText"
+                        android:textSize="12sp" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/mainTextListInput"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="89O0[YOU]"
+                        android:textSize="14sp"
+                        tools:visibility="visible" />
+
+                    <Button
+                        android:id="@+id/mainTextListClearButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:background="@drawable/button_border"
+                        android:fontFamily="@font/roboto_light"
+                        android:text="@string/act_main_text_list_clear"
+                        android:textColor="@color/secondaryText" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -130,4 +179,4 @@
     </LinearLayout>
 
 
-</RelativeLayout>
+</LinearLayout>

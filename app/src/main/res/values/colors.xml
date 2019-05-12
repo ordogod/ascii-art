@@ -8,5 +8,7 @@
     <color name="navigationBar">#28282C</color> <!--for navigation bar (if it presents)-->
 
     <color name="primaryText">#f0f8ff</color>
-    <color name="secondaryText">#a8aaab</color>
+    <color name="secondaryText">#A8AAAB</color>
+
+    <color name="buttonBorder">#808283</color>
 </resources>

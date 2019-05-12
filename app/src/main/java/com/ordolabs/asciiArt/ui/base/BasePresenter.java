@@ -50,7 +50,7 @@ public abstract class BasePresenter<V extends BaseActivity> implements BaseMvpPr
     }
 
     public static class MvpViewNotAttachedException extends RuntimeException {
-        public MvpViewNotAttachedException() {
+        MvpViewNotAttachedException() {
             super("Please call \'Presenter.attachView(MvpView)\' before requestion data from the Presenter.");
         }
     }

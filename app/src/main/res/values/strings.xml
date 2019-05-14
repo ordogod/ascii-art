@@ -1,11 +1,18 @@
 <resources>
     <string name="app_name">ASCII-ART</string>
 
-    <string name="act_main_label">Upload a picture</string>
+    <string name="act_main_label">ASCII-art generator</string>
     <string name="act_main_choose_picture">Choose picture</string>
     <string name="act_main_font_size_header">Font size</string>
     <string name="act_main_font_size_limits">in range from 3 to 25</string>
     <string name="act_main_text_list_header">Text list</string>
     <string name="act_main_text_list_note">use [text] as single literal</string>
     <string name="act_main_text_list_clear">Clear</string>
+    <string name="act_main_upload_img_button">Choose image</string>
+    <string name="act_main_upload_img_info">Image not uploaded</string>
+    <string name="act_main_start_button">Start art generation</string>
+
+    <string name="act_main_font_size_button_less_description">Decreasing font size button.</string>
+    <string name="act_main_font_size_button_more_description">Increasing font size button.</string>
+    <string name="act_main_uploaded_img_description">Choosed from gallery and uploaded image.</string>
 </resources>

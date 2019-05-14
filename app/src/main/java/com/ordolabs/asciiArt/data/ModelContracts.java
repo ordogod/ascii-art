@@ -15,9 +15,11 @@ public interface ModelContracts {
 
         boolean isInputInRangeIncludingBoth(int min, int max, int input);
 
-        void parseLiteralsString(String literalsUnparsed);
+        void parseLiteralsString();
 
         Intent getIntentForGalleryPictureUploading();
+
+        void generateArt();
 
         @Override
         void attachPresenter(P mvpPresenter);

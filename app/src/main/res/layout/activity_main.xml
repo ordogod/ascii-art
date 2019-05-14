@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -20,16 +20,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
         android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/mainSettingsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:orientation="vertical"
-            android:paddingTop="40dp">
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp">
 
             <LinearLayout
                 android:id="@+id/mainSettingsFontSizeRow"
@@ -77,6 +78,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="0.25"
                         android:background="@drawable/button_border"
+                        android:contentDescription="@string/act_main_font_size_button_less_description"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
                         android:src="@drawable/ic_keyboard_arrow_left_light_24dp" />
@@ -99,6 +101,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="0.25"
                         android:background="@drawable/button_border"
+                        android:contentDescription="@string/act_main_font_size_button_more_description"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
                         android:src="@drawable/ic_keyboard_arrow_right_light_24dp" />
@@ -149,12 +152,13 @@
 
                     <EditText
                         android:id="@+id/mainTextListInput"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="89O0[YOU]"
+                        android:inputType="text"
+                        android:text="O#BHSW[YOU]"
                         android:textSize="14sp"
                         tools:visibility="visible" />
 
@@ -164,14 +168,68 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:background="@drawable/button_border"
-                        android:fontFamily="@font/roboto_light"
+                        android:fontFamily="@font/roboto_thin"
                         android:text="@string/act_main_text_list_clear"
-                        android:textColor="@color/secondaryText" />
+                        android:textColor="@color/primaryText" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
+            <Button
+                android:id="@+id/mainUploadImgButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/button_border"
+                android:fontFamily="@font/roboto_thin"
+                android:text="@string/act_main_upload_img_button"
+                android:textColor="@color/primaryText"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/mainUploadImgInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:fontFamily="@font/roboto_light_italic"
+                android:gravity="center"
+                android:text="@string/act_main_upload_img_info"
+                android:textColor="@color/secondaryText"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/mainStartButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/button_border"
+                android:enabled="false"
+                android:fontFamily="@font/roboto_thin"
+                android:text="@string/act_main_start_button"
+                android:textColor="@color/secondaryText"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mainImagesContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.github.chrisbanes.photoview.PhotoView
+                android:id="@+id/mainUploadedImg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:scaleType="center" />
 
         </LinearLayout>
 
@@ -179,4 +237,4 @@
     </LinearLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

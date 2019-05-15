@@ -13,6 +13,8 @@
     <string name="act_main_start_button">Start art generation</string>
     <string name="act_main_start_info">It is heavy computing, app may not respont for some time</string>
 
+    <string name="act_main_start_error_toast">You should choose an image first!</string>
+
     <string name="act_main_font_size_button_less_description">Decreasing font size button.</string>
     <string name="act_main_font_size_button_more_description">Increasing font size button.</string>
     <string name="act_main_uploaded_img_description">Choosed from gallery and uploaded image.</string>

@@ -4,11 +4,18 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.transition.ChangeBounds;
+import android.transition.TransitionManager;
+import android.transition.TransitionSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.chrisbanes.photoview.PhotoView;
 import com.ordolabs.asciiArt.data.MainModel;
@@ -39,6 +46,7 @@ public class MainPresenter<V extends BaseActivity> extends BasePresenter<V> impl
 
     private Button startButton;
 
+    private RelativeLayout uploadedImgContainer;
     private PhotoView uploadedImgView;
 
     MainPresenter(V mvpView) {
@@ -66,6 +74,7 @@ public class MainPresenter<V extends BaseActivity> extends BasePresenter<V> impl
 
         startButton = mvpView.findViewById(R.id.mainStartButton);
 
+        uploadedImgContainer = mvpView.findViewById(R.id.mainImageContainer);
         uploadedImgView = mvpView.findViewById(R.id.mainUploadedImg);
 
         fontSizeButtonLess.setOnTouchListener(new RepeatListener(400, 100, new View.OnClickListener() {
@@ -102,14 +111,59 @@ public class MainPresenter<V extends BaseActivity> extends BasePresenter<V> impl
             }
         });
 
+        uploadedImgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadedImgContainer.setBackgroundColor(
+                        mvpView.getResources().getColor(R.color.imageViewWindowBackground)
+                );
+
+                TransitionManager.beginDelayedTransition(
+                        uploadedImgContainer,
+                        new TransitionSet().addTransition(new ChangeBounds())
+                );
+
+                RelativeLayout.LayoutParams params= new RelativeLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT
+                );
+                uploadedImgContainer.setLayoutParams(params);
+            }
+        });
+
+        uploadedImgContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadedImgContainer.setBackgroundColor(
+                        mvpView.getResources().getColor(R.color.transparent)
+                );
+
+                TransitionManager.beginDelayedTransition(
+                        uploadedImgContainer,
+                        new TransitionSet().addTransition(new ChangeBounds())
+                );
+
+                RelativeLayout.LayoutParams params= new RelativeLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+                params.addRule(RelativeLayout.BELOW, R.id.mainSettingsContainer);
+                uploadedImgContainer.setLayoutParams(params);
+            }
+        });
+
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                setStartButtonStateActive(false);
+
                 mvpModel.setFontSize(Integer.parseInt(fontSizeSpan.getText().toString()));
-                mvpModel.setLiteralsUnparsed( String.valueOf(textListInput.getText()) );
+                mvpModel.setLiteralsUnparsed(String.valueOf(textListInput.getText()));
                 mvpModel.parseLiteralsString();
 
                 mvpModel.generateArt();
+
+                setStartButtonStateActive(true);
+
             }
         });
     }
@@ -122,7 +176,7 @@ public class MainPresenter<V extends BaseActivity> extends BasePresenter<V> impl
     public void setImageViewData(@NonNull Uri data) {
         uploadedImgView.setImageURI(data);
         updateUpoadImgInfo(new File(data.getPath()).getName());
-        setStartButtonStateActive();
+        setStartButtonStateActive(true);
         mvpModel.setUploadedImgData(data);
     }
 
@@ -132,9 +186,10 @@ public class MainPresenter<V extends BaseActivity> extends BasePresenter<V> impl
         uploadImgInfo.setText("Image \'" + uploadedImgName + "\' successfully uploaded");
     }
 
-    private void setStartButtonStateActive() {
-        startButton.setEnabled(true);
-        startButton.setTextColor(mvpView.getResources().getColor(R.color.primaryText));
+    private void setStartButtonStateActive(boolean state) {
+        startButton.setEnabled(state);
+        if (state) startButton.setTextColor(mvpView.getResources().getColor(R.color.primaryText));
+        else startButton.setTextColor(mvpView.getResources().getColor(R.color.secondaryText));
     }
 
     @Override

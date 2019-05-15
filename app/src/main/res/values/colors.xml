@@ -10,7 +10,9 @@
     <color name="primaryText">#f0f8ff</color>
     <color name="secondaryText">#A8AAAB</color>
 
+    <color name="imageViewWindowBackground">#800C0C0E</color>
+
     <color name="buttonBorder">#A8AAAC</color>
     <color name="buttonBGInactive">#28292C</color>
-    <color name="buttonBorderInactive">#565858</color>
+    <color name="buttonBorderInactive">#5B6169</color>
 </resources>

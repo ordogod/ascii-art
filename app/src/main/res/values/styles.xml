@@ -1,5 +1,6 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Action bar style. -->
     <style name="ActionBarStyle" parent="@style/Widget.AppCompat.ActionBar.Solid">
         <item name="android:background">@color/primary</item>
         <item name="colorPrimary">@color/primary</item>

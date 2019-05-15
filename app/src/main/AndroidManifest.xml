@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"> <!--TODO: remove before release-->
 
-        <activity android:name="com.ordolabs.asciiArt.ui.main.MainActivity">
+        <activity android:name="com.ordolabs.asciiArt.ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

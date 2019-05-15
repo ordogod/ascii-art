@@ -1,4 +1,4 @@
-package com.ordolabs.asciiArt.ui.base;
+package com.ordolabs.asciiArt.base;
 
 import android.content.Context;
 import android.content.Intent;

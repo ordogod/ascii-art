@@ -2,8 +2,8 @@ package com.ordolabs.asciiArt.data;
 
 import android.content.Intent;
 
-import com.ordolabs.asciiArt.ui.base.BaseMvpModel;
-import com.ordolabs.asciiArt.ui.main.MainPresenter;
+import com.ordolabs.asciiArt.base.BaseMvpModel;
+import com.ordolabs.asciiArt.ui.MainPresenter;
 
 /**
  * Created by ordogod on 13.05.19.

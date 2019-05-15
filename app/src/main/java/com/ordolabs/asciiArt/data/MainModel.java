@@ -9,8 +9,8 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-import com.ordolabs.asciiArt.ui.base.BaseModel;
-import com.ordolabs.asciiArt.ui.main.MainPresenter;
+import com.ordolabs.asciiArt.base.BaseModel;
+import com.ordolabs.asciiArt.ui.MainPresenter;
 import com.ordolabs.asciiArt.utils.Pixel;
 
 import java.io.IOException;
@@ -247,29 +247,27 @@ public class MainModel<P extends MainPresenter> extends BaseModel<P> implements 
                             cellSymbGrid[i][j].getG(),
                             cellSymbGrid[i][j].getB()
                     );
+                    c.drawText(currentLiteral, j * symbW, i * symbH, p);
                 }
                 else {
                     Pixel avgForNonPrimeLiteral = new Pixel(0, 0, 0);
                     int freeCellsInRow;
-                    if (j + currentLiteral.length() <= cellSymbGrid[0].length - 1) freeCellsInRow = currentLiteral.length();
-                    else freeCellsInRow = cellSymbGrid[0].length - j - 1;
-                    for (int k = 0; k < freeCellsInRow; k++) {
-                        avgForNonPrimeLiteral.increaseEachBy(cellSymbGrid[i][j + k]);
-                    }
-                    avgForNonPrimeLiteral.setEachAvg(freeCellsInRow);
-                    p.setARGB(255,
-                            avgForNonPrimeLiteral.getR(),
-                            avgForNonPrimeLiteral.getG(),
-                            avgForNonPrimeLiteral.getB()
-                    );
-                }
 
-                c.drawText(currentLiteral, j * symbW, i * symbH, p);
-                if (currentLiteral.length() != 1) {
+                    if (j + currentLiteral.length() <= cellSymbGrid[0].length) freeCellsInRow = currentLiteral.length();
+                    else freeCellsInRow = cellSymbGrid[0].length - j - 1;
+
+                    for (int k = 0; k < freeCellsInRow; k++) {
+                        p.setARGB(255,
+                                cellSymbGrid[i][j + k].getR(),
+                                cellSymbGrid[i][j + k].getG(),
+                                cellSymbGrid[i][j + k].getB()
+                        );
+                        c.drawText(String.valueOf(currentLiteral.charAt(k)), (j + k) * symbW, i * symbH, p);
+                    }
+
                     j = j + currentLiteral.length() - 1;
                     if (j >= cellSymbGrid[0].length) break;
                 }
-                mvpPresenter.setImageViewCanvas(bitmapCanvas);
             }
         }
 

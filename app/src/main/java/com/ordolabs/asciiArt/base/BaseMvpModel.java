@@ -1,4 +1,4 @@
-package com.ordolabs.asciiArt.ui.base;
+package com.ordolabs.asciiArt.base;
 
 /**
  * Created by ordogod on 12.05.19.

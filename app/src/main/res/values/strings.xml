@@ -11,6 +11,7 @@
     <string name="act_main_upload_img_button">Choose image</string>
     <string name="act_main_upload_img_info">Image not uploaded</string>
     <string name="act_main_start_button">Start art generation</string>
+    <string name="act_main_start_info">It is heavy computing, app may not respont for some time</string>
 
     <string name="act_main_font_size_button_less_description">Decreasing font size button.</string>
     <string name="act_main_font_size_button_more_description">Increasing font size button.</string>

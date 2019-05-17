@@ -35,5 +35,5 @@ public interface BaseMvpModel<P extends BaseMvpPresenter> {
      *
      * @return this.mvpPresenter.
      */
-    P getPresenterView();
+    P getPresenter();
 }

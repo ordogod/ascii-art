@@ -17,9 +17,9 @@ public interface ModelContracts {
 
         void parseLiteralsString();
 
-        Intent getIntentForGalleryPictureUploading();
+        Intent getIntentForPictureUploading();
 
-        void generateArt();
+        void startArtGenerationAsync();
 
         @Override
         void attachPresenter(P mvpPresenter);
@@ -31,6 +31,6 @@ public interface ModelContracts {
         boolean isPresenterAttached();
 
         @Override
-        P getPresenterView();
+        P getPresenter();
     }
 }

@@ -11,11 +11,13 @@
     <string name="act_main_upload_img_button">Choose image</string>
     <string name="act_main_upload_img_info">Image not uploaded</string>
     <string name="act_main_start_button">Start art generation</string>
-    <string name="act_main_start_info">It is heavy computing, app may not respont for some time</string>
+    <string name="act_main_start_info">It is heavy computing, please wait a bit</string>
 
-    <string name="act_main_start_error_toast">You should choose an image first!</string>
+    <string name="act_main_fullscreen_info_toast">Tap and zoom an image for full screen view.</string>
+    <string name="act_main_text_list_empty_toast">Enter the symbols in text list field first.</string>
+    <string name="act_main_start_button_generating">Generating</string>
 
     <string name="act_main_font_size_button_less_description">Decreasing font size button.</string>
     <string name="act_main_font_size_button_more_description">Increasing font size button.</string>
-    <string name="act_main_uploaded_img_description">Choosed from gallery and uploaded image.</string>
+    <string name="act_main_uploaded_img_description">Chosen from gallery and uploaded image.</string>
 </resources>

@@ -2,19 +2,14 @@ package com.ordolabs.asciiArt.data;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.net.Uri;
-import android.provider.MediaStore;
 
 import com.ordolabs.asciiArt.base.BaseModel;
 import com.ordolabs.asciiArt.ui.MainPresenter;
-import com.ordolabs.asciiArt.utils.Pixel;
+import com.ordolabs.asciiArt.utils.ArtGenerator;
 
-import java.io.IOException;
-import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by ordogod on 12.05.19.
@@ -22,15 +17,25 @@ import java.util.Random;
 
 public class MainModel<P extends MainPresenter> extends BaseModel<P> implements ModelContracts.MainModel<P> {
 
+    private int fontSize;
     private String literalsUnparsed;
     private String[] literalsArr;
-    private int fontSize;
-    private Uri uploadedImgData;
 
-    private int RESULT_LOAD_IMAGE = 1;
+    private Uri uploadedImgData;
+    private Bitmap generatedBitmap;
+
+    private boolean qGenerated;
+    private boolean qTimeoutHandleSet;
+
+    private TimerTask timeoutHandler;
+
+    private int RESULT_LOAD_IMAGE;
 
     public MainModel(P mvpPresenter) {
         attachPresenter(mvpPresenter);
+        qGenerated = false;
+        qTimeoutHandleSet = false;
+        RESULT_LOAD_IMAGE = 1;
     }
 
     @Override
@@ -49,10 +54,9 @@ public class MainModel<P extends MainPresenter> extends BaseModel<P> implements 
     }
 
     @Override
-    public P getPresenterView() {
-        return super.getPresenterView();
+    public P getPresenter() {
+        return super.getPresenter();
     }
-
 
     public String[] getLiteralsArr() {
         return literalsArr;
@@ -81,6 +85,23 @@ public class MainModel<P extends MainPresenter> extends BaseModel<P> implements 
     public int getRESULT_LOAD_IMAGE() {
         return RESULT_LOAD_IMAGE;
     }
+
+    public Bitmap getGeneratedBitmap() {
+        return generatedBitmap;
+    }
+
+    public void setGeneratedBitmap(Bitmap generatedBitmap) {
+        this.generatedBitmap = generatedBitmap;
+    }
+
+    public boolean getqGenerated() {
+        return qGenerated;
+    }
+
+    public void setqGenerated(boolean qGenerated) {
+        this.qGenerated = qGenerated;
+    }
+
 
     @Override
     public boolean isInputInRangeIncludingBoth(int min, int max, int input) {
@@ -157,138 +178,14 @@ public class MainModel<P extends MainPresenter> extends BaseModel<P> implements 
     }
 
     @Override
-    public Intent getIntentForGalleryPictureUploading() {
+    public Intent getIntentForPictureUploading() {
         return new Intent(Intent.ACTION_PICK)
                 .setType("image/*")
                 .putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/jpg", "image/png", "image/jpeg"});
     }
 
     @Override
-    public void generateArt() {
-
-        Bitmap bitmap = null;
-        Pixel[][] pixels;
-        Canvas c;
-        Paint p;
-        Pixel[][] cellSymbGrid;
-
-        Random rnd = new Random();
-
-        int imgW;
-        int imgH;
-
-        try {
-            bitmap = MediaStore.Images.Media.getBitmap(mvpPresenter.getMvpView().getContentResolver(), uploadedImgData);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        assert bitmap != null;
-
-        imgW = bitmap.getWidth();
-        imgH = bitmap.getHeight();
-
-        Bitmap bitmapCanvas = Bitmap.createBitmap(imgW, imgH, Bitmap.Config.ARGB_8888);
-        c = new Canvas(bitmapCanvas);
-        p = new Paint();
-
-        Paint fillAll = new Paint();
-        fillAll.setColor(Color.BLACK);
-        fillAll.setStyle(Paint.Style.FILL);
-
-        c.drawPaint(fillAll);
-        fillAll = null;
-
-        p = new Paint();
-        p.setTextSize(fontSize);
-        p.setStyle(Paint.Style.FILL);
-        p.setAntiAlias(true);
-        p.setTypeface(Typeface.create("Consolas", Typeface.NORMAL));
-
-        pixels = new Pixel[imgH][];
-        int pixelColor;
-
-        for (int i = 0; i < imgH; i++) {
-            pixels[i] = new Pixel[imgW];
-            for (int j = 0; j < imgW; j++) {
-                pixelColor = bitmap.getPixel(j, i);
-                pixels[i][j] = new Pixel(
-                        Color.red(pixelColor),
-                        Color.green(pixelColor),
-                        Color.blue(pixelColor)
-                );
-            }
-        }
-
-        int symbH = (int) (fontSize - Math.floor(fontSize * 0.2d));
-        int symbW = (int) p.measureText("#") + 1;
-
-        cellSymbGrid = new Pixel[imgH / symbH][];
-
-        for (int i = 0; i < cellSymbGrid.length * symbH; i++) {
-            cellSymbGrid[i / symbH] = new Pixel[imgW / symbW];
-            for (int j = 0; j < cellSymbGrid[0].length * symbW; j++) {
-                cellSymbGrid[i / symbH][j / symbW] = getAvgPixelsColor(i, j, symbW, symbH, imgW, imgH, pixels);
-                j = j + symbW - 1;
-            }
-            i = i + symbH - 1;
-        }
-
-        pixels = null;
-        String currentLiteral;
-
-        for (int i = 0; i < cellSymbGrid.length; i++) {
-            for (int j = 0; j < cellSymbGrid[0].length; j++) {
-
-                currentLiteral = getRandomLiteralFromList(rnd);
-                if (currentLiteral.length() == 1) {
-                    p.setARGB(255,
-                            cellSymbGrid[i][j].getR(),
-                            cellSymbGrid[i][j].getG(),
-                            cellSymbGrid[i][j].getB()
-                    );
-                    c.drawText(currentLiteral, j * symbW, i * symbH, p);
-                }
-                else {
-                    Pixel avgForNonPrimeLiteral = new Pixel(0, 0, 0);
-                    int freeCellsInRow;
-
-                    if (j + currentLiteral.length() <= cellSymbGrid[0].length) freeCellsInRow = currentLiteral.length();
-                    else freeCellsInRow = cellSymbGrid[0].length - j - 1;
-
-                    for (int k = 0; k < freeCellsInRow; k++) {
-                        p.setARGB(255,
-                                cellSymbGrid[i][j + k].getR(),
-                                cellSymbGrid[i][j + k].getG(),
-                                cellSymbGrid[i][j + k].getB()
-                        );
-                        c.drawText(String.valueOf(currentLiteral.charAt(k)), (j + k) * symbW, i * symbH, p);
-                    }
-
-                    j = j + currentLiteral.length() - 1;
-                    if (j >= cellSymbGrid[0].length) break;
-                }
-            }
-        }
-
-        mvpPresenter.setImageViewCanvas(bitmapCanvas);
-    }
-
-    private Pixel getAvgPixelsColor(int startI, int startJ, int symbW, int symbH, int imgW, int imgH, Pixel[][] pixels) {
-
-        Pixel avgPixel = new Pixel(0, 0, 0);
-
-        for (int i = startI; i < startI + symbH && i < imgH; i++) {
-            for (int j = startJ; j < startJ + symbW && j < imgW; j++) {
-                avgPixel.increaseEachBy(pixels[i][j]);
-            }
-        }
-
-        avgPixel.setEachAvg(symbW * symbH);
-        return avgPixel;
-    }
-
-    private String getRandomLiteralFromList(Random rnd) {
-        return literalsArr[rnd.nextInt(literalsArr.length)];
+    public void startArtGenerationAsync() {
+        new ArtGenerator(this).execute();
     }
 }

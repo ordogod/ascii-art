@@ -9,10 +9,10 @@ import android.transition.TransitionManager;
 import android.transition.TransitionSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +25,8 @@ import com.ordolabs.asciiArt.base.BasePresenter;
 import com.ordolabs.myapplication.R;
 
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by ordogod on 10.05.19.
@@ -107,7 +109,7 @@ public class MainPresenter<V extends BaseActivity> extends BasePresenter<V> impl
         uploadImgButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mvpView.startActivityForResult(mvpModel.getIntentForGalleryPictureUploading(), mvpModel.getRESULT_LOAD_IMAGE());
+                mvpView.startActivityForResult(mvpModel.getIntentForPictureUploading(), mvpModel.getRESULT_LOAD_IMAGE());
             }
         });
 
@@ -117,15 +119,19 @@ public class MainPresenter<V extends BaseActivity> extends BasePresenter<V> impl
                 uploadedImgContainer.setBackgroundColor(
                         mvpView.getResources().getColor(R.color.imageViewWindowBackground)
                 );
-
-                TransitionManager.beginDelayedTransition(
-                        uploadedImgContainer,
-                        new TransitionSet().addTransition(new ChangeBounds())
-                );
-
                 RelativeLayout.LayoutParams params= new RelativeLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT
                 );
+
+                TransitionManager.beginDelayedTransition(
+                        uploadedImgContainer,
+                        new TransitionSet().addTransition(
+                                new ChangeBounds().setDuration(300L)
+                                        .setStartDelay(0)
+                                        .setInterpolator(new AccelerateInterpolator())
+                        )
+                );
+
                 uploadedImgContainer.setLayoutParams(params);
             }
         });
@@ -136,15 +142,19 @@ public class MainPresenter<V extends BaseActivity> extends BasePresenter<V> impl
                 uploadedImgContainer.setBackgroundColor(
                         mvpView.getResources().getColor(R.color.transparent)
                 );
-
-                TransitionManager.beginDelayedTransition(
-                        uploadedImgContainer,
-                        new TransitionSet().addTransition(new ChangeBounds())
-                );
-
                 RelativeLayout.LayoutParams params= new RelativeLayout.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT
                 );
+
+                TransitionManager.beginDelayedTransition(
+                        uploadedImgContainer,
+                        new TransitionSet().addTransition(
+                                new ChangeBounds().setDuration(300L)
+                                        .setStartDelay(0)
+                                        .setInterpolator(new AccelerateInterpolator())
+                        )
+                );
+
                 params.addRule(RelativeLayout.BELOW, R.id.mainSettingsContainer);
                 uploadedImgContainer.setLayoutParams(params);
             }
@@ -154,22 +164,66 @@ public class MainPresenter<V extends BaseActivity> extends BasePresenter<V> impl
             @Override
             public void onClick(View v) {
 
-                setStartButtonStateActive(false);
+                if (String.valueOf(textListInput.getText()).length() == 0) {
+                    Toast.makeText(
+                            mvpView,
+                            mvpView.getResources().getString(R.string.act_main_text_list_empty_toast),
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
 
                 mvpModel.setFontSize(Integer.parseInt(fontSizeSpan.getText().toString()));
                 mvpModel.setLiteralsUnparsed(String.valueOf(textListInput.getText()));
                 mvpModel.parseLiteralsString();
 
-                mvpModel.generateArt();
+                // makes new timer thread to set generated pic after it was made
+                final Object lock = new Object();
+                new Timer().scheduleAtFixedRate(new TimerTask() {
 
-                setStartButtonStateActive(true);
+                    public void run() {
+                        try {
+                            mvpView.runOnUiThread(new  Runnable() {
 
+                                public void run() {
+                                    if (mvpModel.getqGenerated()) {
+
+                                        setImageViewBitmap(mvpModel.getGeneratedBitmap());
+
+                                        setStartButtonStateActive(true);
+                                        setStartButtonText(mvpView.getResources().getString(R.string.act_main_start_button));
+
+                                        mvpModel.setqGenerated(false);
+
+                                    }
+                                    synchronized (lock) { lock.notify(); }
+                                }
+
+                            });
+
+                            try {
+                                synchronized (lock) { lock.wait(); }
+                            }
+                            catch(InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }, 0, 1000);
+
+                setStartButtonStateActive(false);
+                setStartButtonText(mvpView.getResources().getString(R.string.act_main_start_button_generating));
+
+                mvpModel.startArtGenerationAsync();
             }
         });
     }
 
-    public void setImageViewCanvas(@NonNull Bitmap canvas) {
-        uploadedImgView.setImageBitmap(canvas);
+    private void setImageViewBitmap(@NonNull Bitmap bitmap) {
+        uploadedImgView.setImageBitmap(bitmap);
     }
 
     @Override
@@ -178,6 +232,12 @@ public class MainPresenter<V extends BaseActivity> extends BasePresenter<V> impl
         updateUpoadImgInfo(new File(data.getPath()).getName());
         setStartButtonStateActive(true);
         mvpModel.setUploadedImgData(data);
+
+        Toast.makeText(
+                mvpView,
+                mvpView.getResources().getString(R.string.act_main_fullscreen_info_toast),
+                Toast.LENGTH_LONG
+        ).show();
     }
 
     @SuppressLint("SetTextI18n")
@@ -190,6 +250,10 @@ public class MainPresenter<V extends BaseActivity> extends BasePresenter<V> impl
         startButton.setEnabled(state);
         if (state) startButton.setTextColor(mvpView.getResources().getColor(R.color.primaryText));
         else startButton.setTextColor(mvpView.getResources().getColor(R.color.secondaryText));
+    }
+
+    private void setStartButtonText(@NonNull String text) {
+        startButton.setText(text);
     }
 
     @Override

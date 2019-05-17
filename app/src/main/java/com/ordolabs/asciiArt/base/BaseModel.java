@@ -27,7 +27,7 @@ public abstract class BaseModel<P extends BasePresenter> implements BaseMvpModel
     }
 
     @Override
-    public P getPresenterView() {
+    public P getPresenter() {
         if (isPresenterAttached() == false) throw new MvpPresenterNotAttachedException();
         else return this.mvpPresenter;
     }

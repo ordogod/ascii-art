@@ -4,19 +4,19 @@ package com.ordolabs.asciiArt.utils;
  * Created by ordogod on 13.05.19.
  **/
 
-public class Pixel {
+public class CustomColor {
 
     private int r;
     private int g;
     private int b;
 
-    public Pixel(int r, int g, int b) {
+    public CustomColor(int r, int g, int b) {
         this.r = r;
         this.g = g;
         this.b = b;
     }
 
-    public Pixel(int hexColor) {
+    public CustomColor(int hexColor) {
 
     }
 
@@ -27,7 +27,7 @@ public class Pixel {
     }
 
 
-    public void increaseEachBy(Pixel pix) {
+    public void increaseEachBy(CustomColor pix) {
         this.r += pix.r;
         this.g += pix.g;
         this.b += pix.b;
